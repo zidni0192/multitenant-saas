@@ -1,6 +1,6 @@
 # multitenant-saas
 
-A local-first multi-tenant SaaS starter. The initial API exposes a health endpoint; tenant isolation, authorization, audit logging, and the React client are planned as scoped follow-up work.
+A local-first multi-tenant SaaS starter with an in-memory, tenant-scoped projects API.
 
 ## Local setup
 
@@ -11,6 +11,15 @@ go test ./...
 go run .
 curl http://localhost:8080/health
 ```
+
+## Projects API
+
+Both routes require a non-blank `X-Tenant-ID` header; otherwise the service returns `400 Bad Request`.
+
+- `POST /projects` with JSON `{"name":"Example"}` creates a project and returns `201 Created`.
+- `GET /projects` lists only projects belonging to that tenant.
+
+The project store is in-memory and is reset when the process restarts. This slice demonstrates request-level tenant isolation; it does not provide authentication or persistent storage.
 
 ## Architecture
 
